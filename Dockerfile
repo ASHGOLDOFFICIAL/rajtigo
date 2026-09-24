@@ -11,6 +11,7 @@ COPY project ./project
 COPY build.sbt .
 RUN sbt update
 
+COPY domain ./domain
 COPY src ./src
 RUN sbt app/assembly
 

@@ -26,11 +26,14 @@ def mergeStrategy: String => MergeStrategy = {
   case PathList("META-INF", "services", _*) => MergeStrategy.concat
   case PathList("META-INF", _*)             => MergeStrategy.discard
   case "module-info.class"                  => MergeStrategy.discard
-  case x => MergeStrategy.defaultMergeStrategy(x)
+  case x                                     => MergeStrategy.defaultMergeStrategy(x)
 }
 
 
+// application/adapters/api/commons modules land in later commits alongside
+// the code they build.
 lazy val app = (project in file("."))
+  .aggregate(domain)
   .settings(
     name := "app",
     idePackagePrefix := Some("org.aulune.rajtigo"),
@@ -41,9 +44,19 @@ lazy val app = (project in file("."))
   )
 
 
+lazy val domain = (project in file("domain"))
+  .settings(
+    name := "domain",
+    idePackagePrefix := Some("org.aulune.rajtigo.domain"),
+    libraryDependencies ++= Seq(
+      "org.typelevel" %% "cats-core" % catsVersion withSources () withJavadoc (),
+    ),
+  )
+
+
+val catsVersion = "2.13.0"
 val http4sVersion = "0.23.30"
 val logbackVersion = "1.5.18"
-
 
 val http4sDeps = Seq(
   "org.http4s" %% "http4s-ember-server",
