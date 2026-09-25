@@ -1,8 +1,11 @@
 package org.aulune.rajtigo
 package domain
-package role
+package grant
+
 
 import resource.Resource
+import role.Role
+import role.RoleIdentity
 
 
 /** Grant of a role to a user, optionally scoped to a resource.
@@ -11,15 +14,15 @@ import resource.Resource
  *  @param resource resource the grant is scoped to. Must be `None` if the role
  *    is global.
  */
-final case class RoleGrant private (
+final case class Grant private (
     user: UserId,
     role: RoleIdentity,
     resource: Option[Resource],
 )
 
 
-object RoleGrant:
-  /** Returns [[RoleGrant]] if the resource scoping is consistent with the given
+object Grant:
+  /** Returns [[Grant]] if the resource scoping is consistent with the given
    *  role's applicable resource types.
    *  @param user user the role is granted to.
    *  @param role the role being granted.
@@ -30,12 +33,12 @@ object RoleGrant:
       user: UserId,
       role: Role,
       resource: Option[Resource],
-  ): Option[RoleGrant] =
+  ): Option[Grant] =
     val isConsistent = resource match
       case None      => role.resourceTypes.isEmpty
       case Some(ref) => role.resourceTypes.contains(ref.resourceType)
     Option.when(isConsistent)(
-      new RoleGrant(user = user, role = role.identity, resource = resource),
+      new Grant(user = user, role = role.identity, resource = resource),
     )
 
   /** Unsafe constructor to use inside always-valid boundary.
@@ -50,7 +53,7 @@ object RoleGrant:
       user: UserId,
       role: Role,
       resource: Option[Resource],
-  ): RoleGrant = apply(
+  ): Grant = apply(
     user = user,
     role = role,
     resource = resource,

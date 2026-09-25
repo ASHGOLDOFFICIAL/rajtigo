@@ -14,10 +14,12 @@ import resource.Resource
  *  @tparam F effect type.
  */
 trait PermissionRepository[F[_]]:
-  /** Creates a permission, or updates its description if one with the same
-   *  identity already exists.
+  /** Persists a permission.
+   *  @param elem permission to persist.
+   *  @return permission if success, otherwise the violated
+   *    [[PermissionConstraint]].
    */
-  def upsert(elem: Permission): F[Permission]
+  def persist(elem: Permission): F[Either[PermissionConstraint, Permission]]
 
   /** Returns a permission by its identity, if registered. */
   def get(permission: PermissionIdentity): F[Option[Permission]]

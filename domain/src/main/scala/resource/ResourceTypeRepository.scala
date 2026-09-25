@@ -7,10 +7,14 @@ package resource
  *  @tparam F effect type.
  */
 trait ResourceTypeRepository[F[_]]:
-  /** Creates a resource type, or updates its description if one with the same
-   *  identity already exists.
+  /** Persists a resource type.
+   *  @param elem resource type to persist.
+   *  @return resource type if success, otherwise the violated
+   *    [[ResourceTypeConstraint]].
    */
-  def upsert(elem: ResourceType): F[ResourceType]
+  def persist(
+      elem: ResourceType,
+  ): F[Either[ResourceTypeConstraint, ResourceType]]
 
   /** Returns a resource type by its identity, if registered.
    *  @param namespace namespace of the owning service.
