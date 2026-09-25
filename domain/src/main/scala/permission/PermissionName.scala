@@ -7,11 +7,11 @@ opaque type PermissionName <: String = String
 
 
 object PermissionName:
-  private val regex = "^[A-Za-z_-]+$".r
+  private val regex = "^[a-z_]+$".r
 
   /** Returns [[PermissionName]] if argument is valid, i.e.:
    *    - Name is non-empty.
-   *    - Consists only of latin letters and `_` and `-` symbols.
+   *    - Consists only of lower-case latin letters and `_` symbols.
    *  @param name permission name.
    */
   def apply(name: String): Option[PermissionName] =

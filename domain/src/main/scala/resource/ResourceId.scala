@@ -7,10 +7,11 @@ opaque type ResourceId <: String = String
 
 
 object ResourceId:
-  private val regex = "^[A-Za-z_-]+$".r
+  private val regex = "^[a-z_]+$".r
 
-  /** Returns [[ResourceId]] if argument is valid, i.e. not empty and not
-   *  whitespace only.
+  /** Returns [[ResourceId]] if argument is valid, i.e.:
+   *    - Id is non-empty.
+   *    - Consists only of lower-case latin letters and `_` symbols.
    *  @param id resource id.
    */
   def apply(id: String): Option[ResourceId] = Option.when(regex.matches(id))(id)
