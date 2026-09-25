@@ -9,30 +9,29 @@ import resource.ResourceTypeIdentity
  *  @param namespace namespace of permission.
  *  @param name permission name.
  *  @param description human-readable description.
- *  @param applicableResourceTypes resource types this permission can be scoped
- *    to. Empty means the permission is global.
+ *  @param resourceTypes resource types this permission can be scoped to. Empty
+ *    means the permission is global.
  */
 final case class Permission private (
     namespace: Namespace,
     name: PermissionName,
     description: Description,
-    applicableResourceTypes: Set[ResourceTypeIdentity],
+    resourceTypes: Set[ResourceTypeIdentity],
 ):
   /** Identity of this permission. */
-  def identity: PermissionIdentity = PermissionIdentity(namespace, name)
+  lazy val identity: PermissionIdentity = PermissionIdentity(namespace, name)
 
   /** Copies with validation. */
   def update(
       namespace: Namespace = namespace,
       name: PermissionName = name,
       description: Description = description,
-      applicableResourceTypes: Set[ResourceTypeIdentity] =
-        applicableResourceTypes,
+      resourceTypes: Set[ResourceTypeIdentity] = resourceTypes,
   ): Option[Permission] = Permission(
     namespace = namespace,
     name = name,
     description = description,
-    applicableResourceTypes = applicableResourceTypes,
+    resourceTypes = resourceTypes,
   )
 
 
@@ -41,20 +40,20 @@ object Permission:
    *  @param namespace permission namespace.
    *  @param name permission name.
    *  @param description human-readable description.
-   *  @param applicableResourceTypes resource types this permission can be
-   *    scoped to, empty if the permission is global-only.
+   *  @param resourceTypes resource types this permission can be scoped to,
+   *    empty if the permission is global-only.
    */
   def apply(
       namespace: Namespace,
       name: PermissionName,
       description: Description,
-      applicableResourceTypes: Set[ResourceTypeIdentity],
+      resourceTypes: Set[ResourceTypeIdentity],
   ): Option[Permission] = Some(
     new Permission(
       namespace = namespace,
       name = name,
       description = description,
-      applicableResourceTypes = applicableResourceTypes,
+      resourceTypes = resourceTypes,
     ),
   )
 
@@ -62,18 +61,18 @@ object Permission:
    *  @param namespace permission namespace.
    *  @param name permission name.
    *  @param description human-readable description.
-   *  @param applicableResourceTypes resource types this permission can be
-   *    scoped to, empty if the permission is global-only.
+   *  @param resourceTypes resource types this permission can be scoped to,
+   *    empty if the permission is global-only.
    *  @throws IllegalArgumentException if given params are invalid.
    */
   def unsafe(
       namespace: Namespace,
       name: PermissionName,
       description: Description,
-      applicableResourceTypes: Set[ResourceTypeIdentity],
+      resourceTypes: Set[ResourceTypeIdentity],
   ): Permission = apply(
     namespace = namespace,
     name = name,
     description = description,
-    applicableResourceTypes = applicableResourceTypes,
+    resourceTypes = resourceTypes,
   ).getOrElse(throw IllegalArgumentException())
