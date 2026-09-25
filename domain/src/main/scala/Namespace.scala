@@ -6,11 +6,11 @@ opaque type Namespace <: String = String
 
 
 object Namespace:
-  private val regex = "^[A-Za-z_-]+$".r
+  private val regex = "^[a-z_]+$".r
 
   /** Returns [[Namespace]] if argument is valid, i.e.:
    *    - Namespace is non-empty.
-   *    - Consists only of latin letters and `_` and `-` symbols.
+   *    - Consists only of lower-case latin letters and `_` symbols.
    *  @param namespace permission namespace.
    */
   def apply(namespace: String): Option[Namespace] =
